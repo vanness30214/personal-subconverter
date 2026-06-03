@@ -14,6 +14,17 @@ window.SUBWEB_PERSONAL_PRESET = {
     append_type: "true",
     fdn: "true",
     expand: "false",
-    classic: "true"
+    classic: "true",
+    tfo: "false",
+    add_emoji: "false",
+    remove_emoji: "false",
+    append_info: "false",
+    tls13: "false",
+    new_name: "false",
+    insert: "false",
+    prepend: "false",
+    script: "false",
+    filename: "",
+    interval: ""
   }
 };

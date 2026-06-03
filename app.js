@@ -1,6 +1,26 @@
 (function () {
   const STORAGE_KEY = "subconverter-ui-state-v2";
-  const booleanParams = ["emoji", "udp", "sort", "scv", "list", "append_type", "fdn", "expand", "classic"];
+  const booleanParams = [
+    "emoji",
+    "udp",
+    "sort",
+    "scv",
+    "list",
+    "append_type",
+    "fdn",
+    "expand",
+    "classic",
+    "tfo",
+    "add_emoji",
+    "remove_emoji",
+    "append_info",
+    "tls13",
+    "new_name",
+    "insert",
+    "prepend",
+    "script"
+  ];
+  const optionalTextParams = ["filename", "interval"];
 
   const defaults = {
     endpoint: "http://192.168.100.1:25500/sub",
@@ -18,7 +38,18 @@
       append_type: "true",
       fdn: "true",
       expand: "false",
-      classic: "true"
+      classic: "true",
+      tfo: "false",
+      add_emoji: "false",
+      remove_emoji: "false",
+      append_info: "false",
+      tls13: "false",
+      new_name: "false",
+      insert: "false",
+      prepend: "false",
+      script: "false",
+      filename: "",
+      interval: ""
     },
     extraParams: {}
   };
@@ -33,6 +64,8 @@
     configUrl: document.getElementById("configUrl"),
     include: document.getElementById("include"),
     exclude: document.getElementById("exclude"),
+    filename: document.getElementById("filename"),
+    interval: document.getElementById("interval"),
     extraParams: document.getElementById("extraParams"),
     resultUrl: document.getElementById("resultUrl"),
     copyText: document.getElementById("copyText"),
@@ -44,7 +77,7 @@
   document.getElementById("copyBtn").addEventListener("click", copyResult);
   document.getElementById("resetBtn").addEventListener("click", resetState);
 
-  ["endpoint", "target", "sourceUrl", "configUrl", "include", "exclude", "extraParams"].forEach((id) => {
+  ["endpoint", "target", "sourceUrl", "configUrl", "include", "exclude", "filename", "interval", "extraParams"].forEach((id) => {
     fields[id].addEventListener("input", handleChange);
     fields[id].addEventListener("change", handleChange);
   });
@@ -110,6 +143,8 @@
     fields.configUrl.value = state.configUrl || "";
     fields.include.value = state.params.include || "";
     fields.exclude.value = state.params.exclude || "";
+    fields.filename.value = state.params.filename || "";
+    fields.interval.value = state.params.interval || "";
     fields.extraParams.value = formatExtraParams(state.extraParams);
 
     booleanParams.forEach((key) => {
@@ -124,6 +159,8 @@
     state.configUrl = fields.configUrl.value.trim();
     state.params.include = fields.include.value.trim();
     state.params.exclude = fields.exclude.value.trim();
+    state.params.filename = fields.filename.value.trim();
+    state.params.interval = fields.interval.value.trim();
     state.extraParams = parseExtraParams(fields.extraParams.value);
 
     booleanParams.forEach((key) => {
@@ -149,6 +186,7 @@
     url.searchParams.set("config", state.configUrl);
 
     Object.entries(state.params).forEach(([key, value]) => {
+      if (optionalTextParams.includes(key) && !value) return;
       url.searchParams.set(key, value);
     });
 
